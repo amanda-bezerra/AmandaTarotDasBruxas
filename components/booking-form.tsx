@@ -35,6 +35,7 @@ export function BookingForm({ preselectedService }: BookingFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [isPaymentConfirmed, setIsPaymentConfirmed] = useState(false)
+  const [isConfirmingPayment, setIsConfirmingPayment] = useState(false)
   const [formData, setFormData] = useState<FormData>({
     name: "",
     instagram: "",
@@ -78,6 +79,39 @@ export function BookingForm({ preselectedService }: BookingFormProps) {
       setTimeout(() => setPixCopied(false), 2000)
     } catch (err) {
       console.error("Failed to copy:", err)
+    }
+  }
+
+  const handleConfirmPayment = async () => {
+    setIsConfirmingPayment(true)
+    
+    try {
+      const response = await fetch("/api/confirm-payment", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          instagram: formData.instagram,
+          serviceName: selectedService?.name,
+          servicePrice: selectedService?.price,
+          question: formData.question,
+          personName: formData.personName,
+        }),
+      })
+      
+      if (!response.ok) {
+        throw new Error("Erro ao confirmar pagamento")
+      }
+      
+      setIsPaymentConfirmed(true)
+    } catch (error) {
+      console.error("Error confirming payment:", error)
+      // Mesmo com erro no email, confirmamos o pagamento para nao travar a pessoa
+      setIsPaymentConfirmed(true)
+    } finally {
+      setIsConfirmingPayment(false)
     }
   }
 
@@ -218,11 +252,18 @@ export function BookingForm({ preselectedService }: BookingFormProps) {
               
               {/* Confirm Payment Button */}
               <Button
-                onClick={() => setIsPaymentConfirmed(true)}
+                onClick={handleConfirmPayment}
+                disabled={isConfirmingPayment}
                 className="w-full mt-6 bg-green-600 hover:bg-green-700 text-white h-12 text-base"
               >
-                <Check className="w-5 h-5 mr-2" />
-                Ja fiz o Pix, confirmar pagamento
+                {isConfirmingPayment ? (
+                  <>Confirmando...</>
+                ) : (
+                  <>
+                    <Check className="w-5 h-5 mr-2" />
+                    Ja fiz o Pix, confirmar pagamento
+                  </>
+                )}
               </Button>
               
               <p className="text-xs text-muted-foreground mt-4">
