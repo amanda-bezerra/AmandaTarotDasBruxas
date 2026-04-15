@@ -1,0 +1,138 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Paleta Mística Roxa/Violeta */
+  --background: oklch(0.12 0.03 285);
+  --foreground: oklch(0.95 0.02 285);
+  --card: oklch(0.16 0.04 285);
+  --card-foreground: oklch(0.95 0.02 285);
+  --popover: oklch(0.14 0.03 285);
+  --popover-foreground: oklch(0.95 0.02 285);
+  --primary: oklch(0.65 0.18 285);
+  --primary-foreground: oklch(0.98 0 0);
+  --secondary: oklch(0.25 0.06 285);
+  --secondary-foreground: oklch(0.92 0.03 285);
+  --muted: oklch(0.22 0.04 285);
+  --muted-foreground: oklch(0.70 0.08 285);
+  --accent: oklch(0.75 0.12 50);
+  --accent-foreground: oklch(0.15 0.02 285);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.98 0 0);
+  --border: oklch(0.30 0.06 285);
+  --input: oklch(0.20 0.04 285);
+  --ring: oklch(0.65 0.18 285);
+  --chart-1: oklch(0.65 0.18 285);
+  --chart-2: oklch(0.55 0.15 300);
+  --chart-3: oklch(0.75 0.12 50);
+  --chart-4: oklch(0.70 0.10 320);
+  --chart-5: oklch(0.60 0.12 270);
+  --radius: 0.75rem;
+  
+  /* Custom Mystical Colors */
+  --violet-deep: oklch(0.35 0.15 285);
+  --violet-glow: oklch(0.55 0.20 285);
+  --gold-soft: oklch(0.75 0.12 50);
+  --lilac: oklch(0.70 0.10 290);
+}
+
+@theme inline {
+  --font-sans: 'Cormorant Garamond', 'Georgia', serif;
+  --font-mono: 'Geist Mono', 'Geist Mono Fallback';
+  --font-display: 'Cinzel', 'Georgia', serif;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-violet-deep: var(--violet-deep);
+  --color-violet-glow: var(--violet-glow);
+  --color-gold-soft: var(--gold-soft);
+  --color-lilac: var(--lilac);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Glow Effects */
+.glow-primary {
+  box-shadow: 0 0 20px oklch(0.55 0.18 285 / 0.4), 0 0 40px oklch(0.55 0.18 285 / 0.2);
+}
+
+.glow-gold {
+  box-shadow: 0 0 15px oklch(0.75 0.12 50 / 0.3);
+}
+
+/* Mystical Background Gradient */
+.bg-mystical {
+  background: radial-gradient(ellipse at top, oklch(0.25 0.08 285) 0%, oklch(0.12 0.03 285) 50%, oklch(0.08 0.02 285) 100%);
+}
+
+.bg-mystical-card {
+  background: linear-gradient(135deg, oklch(0.18 0.05 285 / 0.8) 0%, oklch(0.14 0.04 285 / 0.6) 100%);
+  backdrop-filter: blur(10px);
+}
+
+/* Sparkle Animation */
+@keyframes sparkle {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+.animate-sparkle {
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+/* Float Animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Bokeh Effect */
+.bokeh-overlay {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(circle at 20% 30%, oklch(0.55 0.15 285 / 0.15) 0%, transparent 25%),
+    radial-gradient(circle at 80% 20%, oklch(0.60 0.12 290 / 0.12) 0%, transparent 20%),
+    radial-gradient(circle at 60% 70%, oklch(0.50 0.18 280 / 0.10) 0%, transparent 30%),
+    radial-gradient(circle at 10% 80%, oklch(0.65 0.10 295 / 0.08) 0%, transparent 15%),
+    radial-gradient(circle at 90% 60%, oklch(0.55 0.12 285 / 0.12) 0%, transparent 22%);
+  pointer-events: none;
+}
