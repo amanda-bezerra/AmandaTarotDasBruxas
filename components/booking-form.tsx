@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Instagram, MessageSquare, Heart, Sparkles, Check, Send, User, Copy } from "lucide-react"
+import { MessageSquare, Heart, Sparkles, Check, Send, User, Copy } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -19,14 +19,13 @@ const serviceOptions = [
 
 interface FormData {
   name: string
-  instagram: string
   service: string
   question: string
   personName: string
 }
 
 const PIX_KEY = "disseacigana@gmail.com"
-const WHATSAPP_NUMBER = "5565928498288"
+const WHATSAPP_NUMBER = "5565992849828"
 
 interface BookingFormProps {
   preselectedService?: string
@@ -37,7 +36,6 @@ export function BookingForm({ preselectedService }: BookingFormProps) {
   const [isPaymentConfirmed, setIsPaymentConfirmed] = useState(false)
   const [formData, setFormData] = useState<FormData>({
     name: "",
-    instagram: "",
     service: preselectedService || "",
     question: "",
     personName: "",
@@ -64,12 +62,7 @@ export function BookingForm({ preselectedService }: BookingFormProps) {
     setFormData(prev => ({ ...prev, [field]: value }))
   }
 
-  const formatInstagram = (value: string) => {
-    // Remove @ if user types it, we'll add it visually
-    return value.replace(/^@/, "").replace(/\s/g, "")
-  }
-
-  const isFormValid = formData.name && formData.instagram && formData.service
+  const isFormValid = formData.name && formData.service
 
   const copyPixKey = async () => {
     try {
@@ -85,7 +78,6 @@ export function BookingForm({ preselectedService }: BookingFormProps) {
     // Monta a mensagem para o WhatsApp
     let message = `Ola Amanda! Acabei de fazer o Pix para a tiragem.\n\n`
     message += `*Nome:* ${formData.name}\n`
-    message += `*Instagram:* @${formData.instagram}\n`
     message += `*Tiragem:* ${selectedService?.name}\n`
     message += `*Valor:* ${formatPrice(selectedService?.price || 0)}\n`
     
@@ -125,16 +117,12 @@ export function BookingForm({ preselectedService }: BookingFormProps) {
                 Obrigada pelo seu pagamento!
               </h3>
               <p className="text-muted-foreground mb-6 text-pretty text-lg">
-                Em breve entro em contato com voce pelo Instagram para realizarmos sua tiragem.
+                Ja te respondo!
               </p>
               <div className="bg-secondary/30 rounded-xl p-6 text-left space-y-3 mb-6">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Nome:</span>
                   <span className="text-foreground font-medium">{formData.name}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Instagram:</span>
-                  <span className="text-foreground font-medium">@{formData.instagram}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Tiragem:</span>
@@ -144,10 +132,6 @@ export function BookingForm({ preselectedService }: BookingFormProps) {
                   <span className="text-muted-foreground">Valor pago:</span>
                   <span className="text-green-400 font-semibold text-lg">{formatPrice(selectedService?.price || 0)}</span>
                 </div>
-              </div>
-              <div className="flex items-center justify-center gap-2 text-muted-foreground">
-                <Instagram className="w-5 h-5 text-accent" />
-                <span>Fique de olho nas suas DMs!</span>
               </div>
             </CardContent>
           </Card>
@@ -176,10 +160,6 @@ export function BookingForm({ preselectedService }: BookingFormProps) {
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Nome:</span>
                   <span className="text-foreground font-medium">{formData.name}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Seu Instagram:</span>
-                  <span className="text-foreground font-medium">@{formData.instagram}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Servico:</span>
@@ -238,14 +218,14 @@ export function BookingForm({ preselectedService }: BookingFormProps) {
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/50 border border-border/50 text-sm text-muted-foreground mb-4">
-            <Instagram className="w-4 h-4 text-accent" />
+            <Sparkles className="w-4 h-4 text-accent" />
             <span>Quero uma tiragem</span>
           </div>
           <h2 className="font-[var(--font-cinzel)] text-3xl md:text-4xl lg:text-5xl font-semibold mb-4 text-balance">
             Solicite Sua Tiragem
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto text-pretty">
-            Deixe seu @ do Instagram e eu entro em contato para combinarmos tudo
+            Escolha sua tiragem e faca o pagamento via Pix
           </p>
         </div>
 
@@ -255,7 +235,7 @@ export function BookingForm({ preselectedService }: BookingFormProps) {
               Preencha seus dados
             </CardTitle>
             <CardDescription className="text-muted-foreground">
-              Escolha o serviço e deixe seu Instagram que eu te chamo
+              Escolha o servico e preencha seu nome
             </CardDescription>
           </CardHeader>
           
@@ -273,24 +253,6 @@ export function BookingForm({ preselectedService }: BookingFormProps) {
                 placeholder="Como posso te chamar?"
                 className="bg-input border-border text-foreground placeholder:text-muted-foreground"
               />
-            </div>
-
-            {/* Instagram */}
-            <div className="space-y-2">
-              <Label htmlFor="instagram" className="text-foreground flex items-center gap-2">
-                <Instagram className="w-4 h-4 text-muted-foreground" />
-                Seu @ do Instagram
-              </Label>
-              <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">@</span>
-                <Input
-                  id="instagram"
-                  value={formData.instagram}
-                  onChange={(e) => handleInputChange("instagram", formatInstagram(e.target.value))}
-                  placeholder="seu.usuario"
-                  className="bg-input border-border text-foreground placeholder:text-muted-foreground pl-8"
-                />
-              </div>
             </div>
 
             {/* Service Selection */}
@@ -380,7 +342,7 @@ export function BookingForm({ preselectedService }: BookingFormProps) {
             </Button>
 
             <p className="text-xs text-center text-muted-foreground">
-              Vou te chamar no Instagram para combinar data, horario e pagamento via Pix
+              Apos o pagamento, voce sera redirecionada para o WhatsApp
             </p>
           </CardContent>
         </Card>
