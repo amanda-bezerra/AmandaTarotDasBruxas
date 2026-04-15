@@ -26,16 +26,15 @@ interface FormData {
 }
 
 const PIX_KEY = "disseacigana@gmail.com"
+const WHATSAPP_NUMBER = "5565928498288"
 
 interface BookingFormProps {
   preselectedService?: string
 }
 
 export function BookingForm({ preselectedService }: BookingFormProps) {
-  const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [isPaymentConfirmed, setIsPaymentConfirmed] = useState(false)
-  const [isConfirmingPayment, setIsConfirmingPayment] = useState(false)
   const [formData, setFormData] = useState<FormData>({
     name: "",
     instagram: "",
@@ -82,69 +81,34 @@ export function BookingForm({ preselectedService }: BookingFormProps) {
     }
   }
 
-  const handleConfirmPayment = async () => {
-    setIsConfirmingPayment(true)
+  const handleConfirmPayment = () => {
+    // Monta a mensagem para o WhatsApp
+    let message = `Ola Amanda! Acabei de fazer o Pix para a tiragem.\n\n`
+    message += `*Nome:* ${formData.name}\n`
+    message += `*Instagram:* @${formData.instagram}\n`
+    message += `*Tiragem:* ${selectedService?.name}\n`
+    message += `*Valor:* ${formatPrice(selectedService?.price || 0)}\n`
     
-    try {
-      const response = await fetch("/api/confirm-payment", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          instagram: formData.instagram,
-          serviceName: selectedService?.name,
-          servicePrice: selectedService?.price,
-          question: formData.question,
-          personName: formData.personName,
-        }),
-      })
-      
-      if (!response.ok) {
-        throw new Error("Erro ao confirmar pagamento")
-      }
-      
-      setIsPaymentConfirmed(true)
-    } catch (error) {
-      console.error("Error confirming payment:", error)
-      // Mesmo com erro no email, confirmamos o pagamento para nao travar a pessoa
-      setIsPaymentConfirmed(true)
-    } finally {
-      setIsConfirmingPayment(false)
+    if (formData.personName) {
+      message += `*Pessoa envolvida:* ${formData.personName}\n`
     }
+    
+    if (formData.question) {
+      message += `\n*Minha pergunta:*\n${formData.question}`
+    }
+    
+    // Codifica a mensagem para URL
+    const encodedMessage = encodeURIComponent(message)
+    
+    // Abre o WhatsApp com a mensagem pronta
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`, "_blank")
+    
+    // Mostra a tela de confirmacao
+    setIsPaymentConfirmed(true)
   }
 
-  const handleSubmit = async () => {
-    setIsSubmitting(true)
-    
-    try {
-      const response = await fetch("/api/booking", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          instagram: formData.instagram,
-          serviceName: selectedService?.name,
-          servicePrice: selectedService?.price,
-          question: formData.question,
-          personName: formData.personName,
-        }),
-      })
-      
-      if (!response.ok) {
-        throw new Error("Erro ao enviar interesse")
-      }
-      
-      setIsSubmitted(true)
-    } catch (error) {
-      console.error("Error submitting:", error)
-      alert("Erro ao enviar. Por favor, tente novamente.")
-    } finally {
-      setIsSubmitting(false)
-    }
+  const handleSubmit = () => {
+    setIsSubmitted(true)
   }
 
   // Tela final - Pagamento confirmado
@@ -253,17 +217,10 @@ export function BookingForm({ preselectedService }: BookingFormProps) {
               {/* Confirm Payment Button */}
               <Button
                 onClick={handleConfirmPayment}
-                disabled={isConfirmingPayment}
                 className="w-full mt-6 bg-green-600 hover:bg-green-700 text-white h-12 text-base"
               >
-                {isConfirmingPayment ? (
-                  <>Confirmando...</>
-                ) : (
-                  <>
-                    <Check className="w-5 h-5 mr-2" />
-                    Ja fiz o Pix, confirmar pagamento
-                  </>
-                )}
+                <Check className="w-5 h-5 mr-2" />
+                Ja fiz o Pix, enviar comprovante
               </Button>
               
               <p className="text-xs text-muted-foreground mt-4">
@@ -415,17 +372,11 @@ export function BookingForm({ preselectedService }: BookingFormProps) {
             {/* Submit Button */}
             <Button
               onClick={handleSubmit}
-              disabled={!isFormValid || isSubmitting}
+              disabled={!isFormValid}
               className="w-full bg-primary hover:bg-primary/90 text-primary-foreground glow-primary h-12 text-base"
             >
-              {isSubmitting ? (
-                <>Enviando...</>
-              ) : (
-                <>
-                  <Send className="w-4 h-4 mr-2" />
-                  Quero essa tiragem
-                </>
-              )}
+              <Send className="w-4 h-4 mr-2" />
+              Quero essa tiragem
             </Button>
 
             <p className="text-xs text-center text-muted-foreground">
