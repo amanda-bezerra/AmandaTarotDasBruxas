@@ -34,6 +34,7 @@ interface BookingFormProps {
 export function BookingForm({ preselectedService }: BookingFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [isPaymentConfirmed, setIsPaymentConfirmed] = useState(false)
   const [formData, setFormData] = useState<FormData>({
     name: "",
     instagram: "",
@@ -112,6 +113,52 @@ export function BookingForm({ preselectedService }: BookingFormProps) {
     }
   }
 
+  // Tela final - Pagamento confirmado
+  if (isPaymentConfirmed) {
+    return (
+      <section id="agendamento" className="py-20 md:py-28 bg-secondary/20 relative overflow-hidden">
+        <div className="container mx-auto px-4 relative z-10">
+          <Card className="max-w-lg mx-auto bg-mystical-card border-border/50 text-center">
+            <CardContent className="py-12">
+              <div className="w-20 h-20 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-6">
+                <Sparkles className="w-10 h-10 text-green-400" />
+              </div>
+              <h3 className="font-[var(--font-cinzel)] text-2xl font-semibold mb-4 text-foreground">
+                Obrigada pelo seu pagamento!
+              </h3>
+              <p className="text-muted-foreground mb-6 text-pretty text-lg">
+                Em breve entro em contato com voce pelo Instagram para realizarmos sua tiragem.
+              </p>
+              <div className="bg-secondary/30 rounded-xl p-6 text-left space-y-3 mb-6">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Nome:</span>
+                  <span className="text-foreground font-medium">{formData.name}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Instagram:</span>
+                  <span className="text-foreground font-medium">@{formData.instagram}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Tiragem:</span>
+                  <span className="text-foreground font-medium">{selectedService?.name}</span>
+                </div>
+                <div className="flex justify-between border-t border-border/50 pt-3 mt-3">
+                  <span className="text-muted-foreground">Valor pago:</span>
+                  <span className="text-green-400 font-semibold text-lg">{formatPrice(selectedService?.price || 0)}</span>
+                </div>
+              </div>
+              <div className="flex items-center justify-center gap-2 text-muted-foreground">
+                <Instagram className="w-5 h-5 text-accent" />
+                <span>Fique de olho nas suas DMs!</span>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+    )
+  }
+
+  // Tela do Pix - Aguardando pagamento
   if (isSubmitted) {
     return (
       <section id="agendamento" className="py-20 md:py-28 bg-secondary/20 relative overflow-hidden">
@@ -122,10 +169,10 @@ export function BookingForm({ preselectedService }: BookingFormProps) {
                 <Check className="w-8 h-8 text-accent" />
               </div>
               <h3 className="font-[var(--font-cinzel)] text-2xl font-semibold mb-4 text-foreground">
-                Recebi seu interesse!
+                Agora faca o pagamento via Pix
               </h3>
               <p className="text-muted-foreground mb-6 text-pretty">
-                Vou te chamar no Instagram em breve para combinarmos os detalhes da sua tiragem.
+                Copie a chave Pix abaixo, faca o pagamento e clique em confirmar.
               </p>
               <div className="bg-secondary/30 rounded-xl p-6 text-left space-y-3">
                 <div className="flex justify-between">
@@ -169,8 +216,17 @@ export function BookingForm({ preselectedService }: BookingFormProps) {
                 </p>
               </div>
               
-              <p className="text-sm text-muted-foreground mt-6">
-                Fique de olho nas suas DMs!
+              {/* Confirm Payment Button */}
+              <Button
+                onClick={() => setIsPaymentConfirmed(true)}
+                className="w-full mt-6 bg-green-600 hover:bg-green-700 text-white h-12 text-base"
+              >
+                <Check className="w-5 h-5 mr-2" />
+                Ja fiz o Pix, confirmar pagamento
+              </Button>
+              
+              <p className="text-xs text-muted-foreground mt-4">
+                Clique acima apos realizar o pagamento
               </p>
             </CardContent>
           </Card>
