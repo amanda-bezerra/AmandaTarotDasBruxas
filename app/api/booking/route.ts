@@ -1,17 +1,11 @@
 import { NextResponse } from "next/server"
 
 interface BookingData {
-  name: string
-  email: string
-  whatsapp: string
-  service: string
+  instagram: string
   serviceName: string
   servicePrice: number
-  date: string
-  time: string
-  question: string
+  question?: string
   personName?: string
-  observations?: string
 }
 
 export async function POST(request: Request) {
@@ -19,7 +13,7 @@ export async function POST(request: Request) {
     const data: BookingData = await request.json()
     
     // Validate required fields
-    if (!data.name || !data.email || !data.whatsapp || !data.service || !data.date || !data.time || !data.question) {
+    if (!data.instagram || !data.serviceName) {
       return NextResponse.json(
         { error: "Campos obrigatórios não preenchidos" },
         { status: 400 }
@@ -28,35 +22,27 @@ export async function POST(request: Request) {
 
     // Format the email content
     const emailContent = `
-NOVO AGENDAMENTO DE TIRAGEM
+NOVO INTERESSE EM TIRAGEM
 ============================
 
-📋 DADOS DA CLIENTE
-Nome: ${data.name}
-E-mail: ${data.email}
-WhatsApp: ${data.whatsapp}
+📱 INSTAGRAM DO CLIENTE
+@${data.instagram}
 
-🔮 DETALHES DA TIRAGEM
-Serviço: ${data.serviceName}
+🔮 TIRAGEM ESCOLHIDA
+${data.serviceName}
 Valor: R$ ${data.servicePrice.toFixed(2)}
-Data: ${data.date}
-Horário: ${data.time}
 
-💭 PERGUNTA/TEMA
-${data.question}
-
-${data.personName ? `❤️ PESSOA ENVOLVIDA\n${data.personName}\n` : ""}
-${data.observations ? `📝 OBSERVAÇÕES\n${data.observations}\n` : ""}
-
-💳 STATUS DO PAGAMENTO
-Aguardando pagamento
+${data.personName ? `❤️ PESSOA ENVOLVIDA NA TIRAGEM\n${data.personName}\n` : ""}
+${data.question ? `💭 PERGUNTA/TEMA\n${data.question}\n` : ""}
 
 ============================
-Agendamento recebido em: ${new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })}
+Recebido em: ${new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })}
+
+➡️ Entre em contato pelo Instagram para combinar data e pagamento!
 `
 
     // Log the booking data (in production, this would send an actual email)
-    console.log("[v0] New booking received:")
+    console.log("[v0] New booking interest received:")
     console.log(emailContent)
     
     // In production, integrate with an email service like:
@@ -71,26 +57,21 @@ Agendamento recebido em: ${new Date().toLocaleString("pt-BR", { timeZone: "Ameri
     
     await resend.emails.send({
       from: 'agendamento@seudominio.com',
-      to: 'disseacigana@gmail.com', // Admin email
-      subject: `Novo Agendamento - ${data.name} - ${data.serviceName}`,
+      to: 'disseacigana@gmail.com',
+      subject: `Novo Interesse - @${data.instagram} - ${data.serviceName}`,
       text: emailContent,
     })
     */
 
-    // For now, return success
     return NextResponse.json({ 
       success: true, 
-      message: "Agendamento recebido com sucesso!",
-      booking: {
-        id: `BK${Date.now()}`,
-        status: "pending_payment"
-      }
+      message: "Interesse recebido com sucesso!",
     })
     
   } catch (error) {
     console.error("[v0] Error processing booking:", error)
     return NextResponse.json(
-      { error: "Erro ao processar agendamento" },
+      { error: "Erro ao processar solicitação" },
       { status: 500 }
     )
   }

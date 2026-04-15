@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Calendar, Clock, User, Mail, Phone, MessageSquare, Heart, Sparkles, ArrowRight, ArrowLeft, Check } from "lucide-react"
+import { Instagram, MessageSquare, Heart, Sparkles, Check, Send } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -17,20 +17,11 @@ const serviceOptions = [
   { id: "templo-afrodite", name: "Templo de Afrodite", price: 50, isLove: true },
 ]
 
-const timeSlots = [
-  "09:00", "10:00", "11:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00"
-]
-
 interface FormData {
-  name: string
-  email: string
-  whatsapp: string
+  instagram: string
   service: string
-  date: string
-  time: string
   question: string
   personName: string
-  observations: string
 }
 
 interface BookingFormProps {
@@ -38,19 +29,13 @@ interface BookingFormProps {
 }
 
 export function BookingForm({ preselectedService }: BookingFormProps) {
-  const [step, setStep] = useState(1)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [formData, setFormData] = useState<FormData>({
-    name: "",
-    email: "",
-    whatsapp: "",
+    instagram: "",
     service: preselectedService || "",
-    date: "",
-    time: "",
     question: "",
     personName: "",
-    observations: "",
   })
 
   useEffect(() => {
@@ -73,16 +58,12 @@ export function BookingForm({ preselectedService }: BookingFormProps) {
     setFormData(prev => ({ ...prev, [field]: value }))
   }
 
-  const formatWhatsApp = (value: string) => {
-    const numbers = value.replace(/\D/g, "")
-    if (numbers.length <= 2) return numbers
-    if (numbers.length <= 7) return `(${numbers.slice(0, 2)}) ${numbers.slice(2)}`
-    return `(${numbers.slice(0, 2)}) ${numbers.slice(2, 7)}-${numbers.slice(7, 11)}`
+  const formatInstagram = (value: string) => {
+    // Remove @ if user types it, we'll add it visually
+    return value.replace(/^@/, "").replace(/\s/g, "")
   }
 
-  const isStep1Valid = formData.name && formData.email && formData.whatsapp
-  const isStep2Valid = formData.service && formData.date && formData.time
-  const isStep3Valid = formData.question
+  const isFormValid = formData.instagram && formData.service
 
   const handleSubmit = async () => {
     setIsSubmitting(true)
@@ -94,23 +75,22 @@ export function BookingForm({ preselectedService }: BookingFormProps) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          ...formData,
+          instagram: formData.instagram,
           serviceName: selectedService?.name,
           servicePrice: selectedService?.price,
+          question: formData.question,
+          personName: formData.personName,
         }),
       })
       
       if (!response.ok) {
-        throw new Error("Erro ao enviar agendamento")
+        throw new Error("Erro ao enviar interesse")
       }
-      
-      const result = await response.json()
-      console.log("[v0] Booking submitted:", result)
       
       setIsSubmitted(true)
     } catch (error) {
-      console.error("[v0] Error submitting booking:", error)
-      alert("Erro ao enviar agendamento. Por favor, tente novamente.")
+      console.error("Error submitting:", error)
+      alert("Erro ao enviar. Por favor, tente novamente.")
     } finally {
       setIsSubmitting(false)
     }
@@ -120,30 +100,25 @@ export function BookingForm({ preselectedService }: BookingFormProps) {
     return (
       <section id="agendamento" className="py-20 md:py-28 bg-secondary/20 relative overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
-          <Card className="max-w-2xl mx-auto bg-mystical-card border-border/50 text-center">
+          <Card className="max-w-lg mx-auto bg-mystical-card border-border/50 text-center">
             <CardContent className="py-12">
               <div className="w-16 h-16 rounded-full bg-accent/20 flex items-center justify-center mx-auto mb-6">
                 <Check className="w-8 h-8 text-accent" />
               </div>
               <h3 className="font-[var(--font-cinzel)] text-2xl font-semibold mb-4 text-foreground">
-                Agendamento Recebido!
+                Recebi seu interesse!
               </h3>
               <p className="text-muted-foreground mb-6 text-pretty">
-                Obrigada por agendar sua tiragem, {formData.name.split(" ")[0]}! 
-                Você receberá a confirmação por e-mail e WhatsApp em breve.
+                Vou te chamar no Instagram em breve para combinarmos os detalhes da sua tiragem.
               </p>
               <div className="bg-secondary/30 rounded-xl p-6 text-left space-y-3">
                 <div className="flex justify-between">
+                  <span className="text-muted-foreground">Seu Instagram:</span>
+                  <span className="text-foreground font-medium">@{formData.instagram}</span>
+                </div>
+                <div className="flex justify-between">
                   <span className="text-muted-foreground">Serviço:</span>
                   <span className="text-foreground font-medium">{selectedService?.name}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Data:</span>
-                  <span className="text-foreground font-medium">{formData.date}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Horário:</span>
-                  <span className="text-foreground font-medium">{formData.time}</span>
                 </div>
                 <div className="flex justify-between border-t border-border/50 pt-3 mt-3">
                   <span className="text-muted-foreground">Valor:</span>
@@ -151,7 +126,7 @@ export function BookingForm({ preselectedService }: BookingFormProps) {
                 </div>
               </div>
               <p className="text-sm text-muted-foreground mt-6">
-                Aguarde o link de pagamento que será enviado para seu WhatsApp.
+                Fique de olho nas suas DMs!
               </p>
             </CardContent>
           </Card>
@@ -165,315 +140,141 @@ export function BookingForm({ preselectedService }: BookingFormProps) {
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/50 border border-border/50 text-sm text-muted-foreground mb-4">
-            <Calendar className="w-4 h-4 text-accent" />
-            <span>Agendamento</span>
+            <Instagram className="w-4 h-4 text-accent" />
+            <span>Quero uma tiragem</span>
           </div>
           <h2 className="font-[var(--font-cinzel)] text-3xl md:text-4xl lg:text-5xl font-semibold mb-4 text-balance">
-            Agende Sua Tiragem
+            Solicite Sua Tiragem
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto text-pretty">
-            Preencha o formulário abaixo para agendar sua consulta
+            Deixe seu @ do Instagram e eu entro em contato para combinarmos tudo
           </p>
         </div>
 
-        {/* Progress Steps */}
-        <div className="flex justify-center mb-8">
-          <div className="flex items-center gap-2">
-            {[1, 2, 3].map((s) => (
-              <div key={s} className="flex items-center">
-                <div 
-                  className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
-                    step >= s 
-                      ? "bg-primary text-primary-foreground" 
-                      : "bg-secondary text-muted-foreground"
-                  }`}
-                >
-                  {step > s ? <Check className="w-5 h-5" /> : s}
-                </div>
-                {s < 3 && (
-                  <div className={`w-12 md:w-20 h-1 mx-2 rounded-full transition-colors ${
-                    step > s ? "bg-primary" : "bg-secondary"
-                  }`} />
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <Card className="max-w-2xl mx-auto bg-mystical-card border-border/50">
+        <Card className="max-w-lg mx-auto bg-mystical-card border-border/50">
           <CardHeader>
             <CardTitle className="font-[var(--font-cinzel)] text-xl text-foreground">
-              {step === 1 && "Seus Dados"}
-              {step === 2 && "Escolha a Tiragem"}
-              {step === 3 && "Sua Pergunta"}
+              Preencha seus dados
             </CardTitle>
             <CardDescription className="text-muted-foreground">
-              {step === 1 && "Informe seus dados de contato"}
-              {step === 2 && "Selecione o serviço, data e horário"}
-              {step === 3 && "Conte-me sobre o que você quer saber"}
+              Escolha o serviço e deixe seu Instagram que eu te chamo
             </CardDescription>
           </CardHeader>
           
           <CardContent className="space-y-6">
-            {/* Step 1: Personal Info */}
-            {step === 1 && (
-              <>
-                <div className="space-y-2">
-                  <Label htmlFor="name" className="text-foreground flex items-center gap-2">
-                    <User className="w-4 h-4 text-muted-foreground" />
-                    Nome completo
-                  </Label>
-                  <Input
-                    id="name"
-                    value={formData.name}
-                    onChange={(e) => handleInputChange("name", e.target.value)}
-                    placeholder="Seu nome completo"
-                    className="bg-input border-border text-foreground placeholder:text-muted-foreground"
-                  />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="email" className="text-foreground flex items-center gap-2">
-                    <Mail className="w-4 h-4 text-muted-foreground" />
-                    E-mail
-                  </Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) => handleInputChange("email", e.target.value)}
-                    placeholder="seu@email.com"
-                    className="bg-input border-border text-foreground placeholder:text-muted-foreground"
-                  />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="whatsapp" className="text-foreground flex items-center gap-2">
-                    <Phone className="w-4 h-4 text-muted-foreground" />
-                    WhatsApp
-                  </Label>
-                  <Input
-                    id="whatsapp"
-                    value={formData.whatsapp}
-                    onChange={(e) => handleInputChange("whatsapp", formatWhatsApp(e.target.value))}
-                    placeholder="(11) 99999-9999"
-                    maxLength={15}
-                    className="bg-input border-border text-foreground placeholder:text-muted-foreground"
-                  />
-                </div>
-              </>
-            )}
-
-            {/* Step 2: Service Selection */}
-            {step === 2 && (
-              <>
-                <div className="space-y-2">
-                  <Label className="text-foreground flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-muted-foreground" />
-                    Tipo de tiragem
-                  </Label>
-                  <Select
-                    value={formData.service}
-                    onValueChange={(value) => handleInputChange("service", value)}
-                  >
-                    <SelectTrigger className="bg-input border-border text-foreground">
-                      <SelectValue placeholder="Selecione a tiragem" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-popover border-border">
-                      {serviceOptions.map((service) => (
-                        <SelectItem 
-                          key={service.id} 
-                          value={service.id}
-                          className="text-popover-foreground"
-                        >
-                          {service.name} - {formatPrice(service.price)}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                
-                <div className="grid sm:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="date" className="text-foreground flex items-center gap-2">
-                      <Calendar className="w-4 h-4 text-muted-foreground" />
-                      Data desejada
-                    </Label>
-                    <Input
-                      id="date"
-                      type="date"
-                      value={formData.date}
-                      onChange={(e) => handleInputChange("date", e.target.value)}
-                      min={new Date().toISOString().split("T")[0]}
-                      className="bg-input border-border text-foreground"
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label className="text-foreground flex items-center gap-2">
-                      <Clock className="w-4 h-4 text-muted-foreground" />
-                      Horário desejado
-                    </Label>
-                    <Select
-                      value={formData.time}
-                      onValueChange={(value) => handleInputChange("time", value)}
-                    >
-                      <SelectTrigger className="bg-input border-border text-foreground">
-                        <SelectValue placeholder="Selecione" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-popover border-border">
-                        {timeSlots.map((time) => (
-                          <SelectItem key={time} value={time} className="text-popover-foreground">
-                            {time}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-              </>
-            )}
-
-            {/* Step 3: Question */}
-            {step === 3 && (
-              <>
-                <div className="space-y-2">
-                  <Label htmlFor="question" className="text-foreground flex items-center gap-2">
-                    <MessageSquare className="w-4 h-4 text-muted-foreground" />
-                    Tema ou pergunta
-                  </Label>
-                  <Textarea
-                    id="question"
-                    value={formData.question}
-                    onChange={(e) => handleInputChange("question", e.target.value)}
-                    placeholder="Descreva sua pergunta ou o tema que deseja explorar na tiragem..."
-                    rows={4}
-                    className="bg-input border-border text-foreground placeholder:text-muted-foreground resize-none"
-                  />
-                </div>
-                
-                {isLoveReading && (
-                  <div className="space-y-2 p-4 rounded-xl bg-accent/10 border border-accent/30">
-                    <Label htmlFor="personName" className="text-foreground flex items-center gap-2">
-                      <Heart className="w-4 h-4 text-accent" />
-                      Nome da pessoa sobre quem será a tiragem
-                    </Label>
-                    <Input
-                      id="personName"
-                      value={formData.personName}
-                      onChange={(e) => handleInputChange("personName", e.target.value)}
-                      placeholder="Nome da pessoa"
-                      className="bg-input border-border text-foreground placeholder:text-muted-foreground"
-                    />
-                    <p className="text-xs text-muted-foreground">
-                      Este campo é importante para leituras amorosas ou sobre terceiros
-                    </p>
-                  </div>
-                )}
-
-                {!isLoveReading && (
-                  <div className="space-y-2">
-                    <Label htmlFor="personName" className="text-foreground flex items-center gap-2">
-                      <Heart className="w-4 h-4 text-muted-foreground" />
-                      Nome da pessoa envolvida (opcional)
-                    </Label>
-                    <Input
-                      id="personName"
-                      value={formData.personName}
-                      onChange={(e) => handleInputChange("personName", e.target.value)}
-                      placeholder="Se a tiragem envolver outra pessoa"
-                      className="bg-input border-border text-foreground placeholder:text-muted-foreground"
-                    />
-                  </div>
-                )}
-                
-                <div className="space-y-2">
-                  <Label htmlFor="observations" className="text-foreground">
-                    Observações adicionais (opcional)
-                  </Label>
-                  <Textarea
-                    id="observations"
-                    value={formData.observations}
-                    onChange={(e) => handleInputChange("observations", e.target.value)}
-                    placeholder="Alguma informação adicional que considere importante..."
-                    rows={3}
-                    className="bg-input border-border text-foreground placeholder:text-muted-foreground resize-none"
-                  />
-                </div>
-
-                {/* Order Summary */}
-                <div className="bg-secondary/30 rounded-xl p-6 space-y-3">
-                  <h4 className="font-semibold text-foreground mb-4">Resumo do Pedido</h4>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Cliente:</span>
-                    <span className="text-foreground">{formData.name}</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Serviço:</span>
-                    <span className="text-foreground">{selectedService?.name}</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Data:</span>
-                    <span className="text-foreground">{formData.date}</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Horário:</span>
-                    <span className="text-foreground">{formData.time}</span>
-                  </div>
-                  <div className="flex justify-between border-t border-border/50 pt-3 mt-3">
-                    <span className="text-foreground font-medium">Total:</span>
-                    <span className="text-accent font-semibold text-lg">
-                      {formatPrice(selectedService?.price || 0)}
-                    </span>
-                  </div>
-                </div>
-              </>
-            )}
-
-            {/* Navigation Buttons */}
-            <div className="flex justify-between pt-4">
-              {step > 1 ? (
-                <Button
-                  variant="outline"
-                  onClick={() => setStep(step - 1)}
-                  className="border-border hover:bg-secondary/50"
-                >
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Voltar
-                </Button>
-              ) : (
-                <div />
-              )}
-              
-              {step < 3 ? (
-                <Button
-                  onClick={() => setStep(step + 1)}
-                  disabled={step === 1 ? !isStep1Valid : !isStep2Valid}
-                  className="bg-primary hover:bg-primary/90 text-primary-foreground glow-primary"
-                >
-                  Continuar
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-              ) : (
-                <Button
-                  onClick={handleSubmit}
-                  disabled={!isStep3Valid || isSubmitting}
-                  className="bg-accent hover:bg-accent/90 text-accent-foreground glow-gold"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <div className="w-4 h-4 border-2 border-accent-foreground/30 border-t-accent-foreground rounded-full animate-spin mr-2" />
-                      Enviando...
-                    </>
-                  ) : (
-                    <>
-                      Confirmar Agendamento
-                      <Check className="w-4 h-4 ml-2" />
-                    </>
-                  )}
-                </Button>
-              )}
+            {/* Instagram */}
+            <div className="space-y-2">
+              <Label htmlFor="instagram" className="text-foreground flex items-center gap-2">
+                <Instagram className="w-4 h-4 text-muted-foreground" />
+                Seu @ do Instagram
+              </Label>
+              <div className="relative">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">@</span>
+                <Input
+                  id="instagram"
+                  value={formData.instagram}
+                  onChange={(e) => handleInputChange("instagram", formatInstagram(e.target.value))}
+                  placeholder="seu.usuario"
+                  className="bg-input border-border text-foreground placeholder:text-muted-foreground pl-8"
+                />
+              </div>
             </div>
+
+            {/* Service Selection */}
+            <div className="space-y-2">
+              <Label className="text-foreground flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-muted-foreground" />
+                Qual tiragem você quer?
+              </Label>
+              <Select
+                value={formData.service}
+                onValueChange={(value) => handleInputChange("service", value)}
+              >
+                <SelectTrigger className="bg-input border-border text-foreground">
+                  <SelectValue placeholder="Selecione a tiragem" />
+                </SelectTrigger>
+                <SelectContent className="bg-popover border-border">
+                  {serviceOptions.map((service) => (
+                    <SelectItem 
+                      key={service.id} 
+                      value={service.id}
+                      className="text-popover-foreground"
+                    >
+                      {service.name} - {formatPrice(service.price)}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Person Name for Love Readings */}
+            {isLoveReading && (
+              <div className="space-y-2 p-4 rounded-xl bg-accent/10 border border-accent/30">
+                <Label htmlFor="personName" className="text-foreground flex items-center gap-2">
+                  <Heart className="w-4 h-4 text-accent" />
+                  Nome da pessoa sobre quem sera a tiragem
+                </Label>
+                <Input
+                  id="personName"
+                  value={formData.personName}
+                  onChange={(e) => handleInputChange("personName", e.target.value)}
+                  placeholder="Nome da pessoa"
+                  className="bg-input border-border text-foreground placeholder:text-muted-foreground"
+                />
+                <p className="text-xs text-muted-foreground">
+                  Importante para leituras amorosas ou sobre terceiros
+                </p>
+              </div>
+            )}
+
+            {/* Question (Optional) */}
+            <div className="space-y-2">
+              <Label htmlFor="question" className="text-foreground flex items-center gap-2">
+                <MessageSquare className="w-4 h-4 text-muted-foreground" />
+                Sobre o que quer saber? (opcional)
+              </Label>
+              <Textarea
+                id="question"
+                value={formData.question}
+                onChange={(e) => handleInputChange("question", e.target.value)}
+                placeholder="Se quiser, ja pode adiantar sua pergunta ou tema..."
+                rows={3}
+                className="bg-input border-border text-foreground placeholder:text-muted-foreground resize-none"
+              />
+            </div>
+
+            {/* Selected Service Summary */}
+            {selectedService && (
+              <div className="bg-secondary/30 rounded-xl p-4 flex justify-between items-center">
+                <div>
+                  <p className="text-sm text-muted-foreground">Servico selecionado</p>
+                  <p className="text-foreground font-medium">{selectedService.name}</p>
+                </div>
+                <p className="text-accent font-semibold text-lg">
+                  {formatPrice(selectedService.price)}
+                </p>
+              </div>
+            )}
+
+            {/* Submit Button */}
+            <Button
+              onClick={handleSubmit}
+              disabled={!isFormValid || isSubmitting}
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground glow-primary h-12 text-base"
+            >
+              {isSubmitting ? (
+                <>Enviando...</>
+              ) : (
+                <>
+                  <Send className="w-4 h-4 mr-2" />
+                  Quero essa tiragem
+                </>
+              )}
+            </Button>
+
+            <p className="text-xs text-center text-muted-foreground">
+              Vou te chamar no Instagram para combinar data, horario e pagamento via Pix
+            </p>
           </CardContent>
         </Card>
       </div>
