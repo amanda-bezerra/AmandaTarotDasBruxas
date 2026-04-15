@@ -34,6 +34,12 @@ export function Header() {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
             <button 
+              onClick={() => scrollToSection("sobre")}
+              className="text-muted-foreground hover:text-foreground transition-colors text-sm uppercase tracking-widest"
+            >
+              Sobre
+            </button>
+            <button 
               onClick={() => scrollToSection("servicos")}
               className="text-muted-foreground hover:text-foreground transition-colors text-sm uppercase tracking-widest"
             >
@@ -73,6 +79,12 @@ export function Header() {
         {isMenuOpen && (
           <nav className="md:hidden py-4 border-t border-border/50 animate-in slide-in-from-top-2">
             <div className="flex flex-col gap-4">
+              <button 
+                onClick={() => scrollToSection("sobre")}
+                className="text-muted-foreground hover:text-foreground transition-colors text-sm uppercase tracking-widest py-2"
+              >
+                Sobre
+              </button>
               <button 
                 onClick={() => scrollToSection("servicos")}
                 className="text-muted-foreground hover:text-foreground transition-colors text-sm uppercase tracking-widest py-2"

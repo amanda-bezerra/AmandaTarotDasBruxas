@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Instagram, MessageSquare, Heart, Sparkles, Check, Send } from "lucide-react"
+import { Instagram, MessageSquare, Heart, Sparkles, Check, Send, User, Copy } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -18,11 +18,14 @@ const serviceOptions = [
 ]
 
 interface FormData {
+  name: string
   instagram: string
   service: string
   question: string
   personName: string
 }
+
+const PIX_KEY = "disseacigana@gmail.com"
 
 interface BookingFormProps {
   preselectedService?: string
@@ -32,11 +35,13 @@ export function BookingForm({ preselectedService }: BookingFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [formData, setFormData] = useState<FormData>({
+    name: "",
     instagram: "",
     service: preselectedService || "",
     question: "",
     personName: "",
   })
+  const [pixCopied, setPixCopied] = useState(false)
 
   useEffect(() => {
     if (preselectedService) {
@@ -63,7 +68,17 @@ export function BookingForm({ preselectedService }: BookingFormProps) {
     return value.replace(/^@/, "").replace(/\s/g, "")
   }
 
-  const isFormValid = formData.instagram && formData.service
+  const isFormValid = formData.name && formData.instagram && formData.service
+
+  const copyPixKey = async () => {
+    try {
+      await navigator.clipboard.writeText(PIX_KEY)
+      setPixCopied(true)
+      setTimeout(() => setPixCopied(false), 2000)
+    } catch (err) {
+      console.error("Failed to copy:", err)
+    }
+  }
 
   const handleSubmit = async () => {
     setIsSubmitting(true)
@@ -75,6 +90,7 @@ export function BookingForm({ preselectedService }: BookingFormProps) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          name: formData.name,
           instagram: formData.instagram,
           serviceName: selectedService?.name,
           servicePrice: selectedService?.price,
@@ -113,11 +129,15 @@ export function BookingForm({ preselectedService }: BookingFormProps) {
               </p>
               <div className="bg-secondary/30 rounded-xl p-6 text-left space-y-3">
                 <div className="flex justify-between">
+                  <span className="text-muted-foreground">Nome:</span>
+                  <span className="text-foreground font-medium">{formData.name}</span>
+                </div>
+                <div className="flex justify-between">
                   <span className="text-muted-foreground">Seu Instagram:</span>
                   <span className="text-foreground font-medium">@{formData.instagram}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Serviço:</span>
+                  <span className="text-muted-foreground">Servico:</span>
                   <span className="text-foreground font-medium">{selectedService?.name}</span>
                 </div>
                 <div className="flex justify-between border-t border-border/50 pt-3 mt-3">
@@ -125,6 +145,30 @@ export function BookingForm({ preselectedService }: BookingFormProps) {
                   <span className="text-accent font-semibold text-lg">{formatPrice(selectedService?.price || 0)}</span>
                 </div>
               </div>
+              
+              {/* PIX Payment Info */}
+              <div className="bg-accent/10 border border-accent/30 rounded-xl p-4 mt-6">
+                <p className="text-sm text-foreground font-medium mb-2">Chave Pix para pagamento:</p>
+                <div className="flex items-center gap-2 bg-background/50 rounded-lg p-3">
+                  <code className="text-accent text-sm flex-1">{PIX_KEY}</code>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={copyPixKey}
+                    className="h-8 px-2 hover:bg-accent/20"
+                  >
+                    {pixCopied ? (
+                      <Check className="w-4 h-4 text-green-500" />
+                    ) : (
+                      <Copy className="w-4 h-4 text-muted-foreground" />
+                    )}
+                  </Button>
+                </div>
+                <p className="text-xs text-muted-foreground mt-2">
+                  Amanda Goncalves Bezerra
+                </p>
+              </div>
+              
               <p className="text-sm text-muted-foreground mt-6">
                 Fique de olho nas suas DMs!
               </p>
@@ -162,6 +206,21 @@ export function BookingForm({ preselectedService }: BookingFormProps) {
           </CardHeader>
           
           <CardContent className="space-y-6">
+            {/* Name */}
+            <div className="space-y-2">
+              <Label htmlFor="name" className="text-foreground flex items-center gap-2">
+                <User className="w-4 h-4 text-muted-foreground" />
+                Seu nome
+              </Label>
+              <Input
+                id="name"
+                value={formData.name}
+                onChange={(e) => handleInputChange("name", e.target.value)}
+                placeholder="Como posso te chamar?"
+                className="bg-input border-border text-foreground placeholder:text-muted-foreground"
+              />
+            </div>
+
             {/* Instagram */}
             <div className="space-y-2">
               <Label htmlFor="instagram" className="text-foreground flex items-center gap-2">

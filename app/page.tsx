@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Header } from "@/components/header"
 import { Hero } from "@/components/hero"
+import { About } from "@/components/about"
 import { Services } from "@/components/services"
 import { HowItWorks } from "@/components/how-it-works"
 import { Benefits } from "@/components/benefits"
@@ -35,6 +36,7 @@ export default function Home() {
     <main className="min-h-screen">
       <Header />
       <Hero />
+      <About />
       <Services onSelectService={handleSelectService} />
       <HowItWorks />
       <Benefits />

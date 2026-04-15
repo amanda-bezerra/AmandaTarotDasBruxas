@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 
 interface BookingData {
+  name: string
   instagram: string
   serviceName: string
   servicePrice: number
@@ -13,7 +14,7 @@ export async function POST(request: Request) {
     const data: BookingData = await request.json()
     
     // Validate required fields
-    if (!data.instagram || !data.serviceName) {
+    if (!data.name || !data.instagram || !data.serviceName) {
       return NextResponse.json(
         { error: "Campos obrigatórios não preenchidos" },
         { status: 400 }
@@ -25,7 +26,10 @@ export async function POST(request: Request) {
 NOVO INTERESSE EM TIRAGEM
 ============================
 
-📱 INSTAGRAM DO CLIENTE
+👤 NOME
+${data.name}
+
+📱 INSTAGRAM
 @${data.instagram}
 
 🔮 TIRAGEM ESCOLHIDA
