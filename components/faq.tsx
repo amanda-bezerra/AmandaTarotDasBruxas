@@ -31,7 +31,7 @@ const faqs = [
   },
   {
     question: "Posso mandar mais de uma pergunta?",
-    answer: "Depende do serviço escolhido. Na tiragem 'Pergunte ao Tarot das Bruxas' é uma pergunta objetiva. No 'Templo de Afrodite', você tem direito a 2 perguntas adicionais após a leitura. Nas consultas de 30 minutos ou 1 hora, você pode explorar mais questões.",
+    answer: "Depende do serviço escolhido. Na 'Pergunta Objetiva ao Tarô' é uma pergunta objetiva (R$25,00 cada). O 'Pacote Completo com Todas' cobre todas as áreas da sua vida, e a 'Consulta Completa' de 1 hora permite explorar diversas questões. Lembre-se: cada pergunta precisa ser objetiva e individual, pois cada uma gera uma energia e resposta diferente no tarô.",
   },
 ]
 

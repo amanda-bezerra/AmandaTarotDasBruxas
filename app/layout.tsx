@@ -16,9 +16,9 @@ const cinzel = Cinzel({
 })
 
 export const metadata: Metadata = {
-  title: 'Amanda Bezerra | Tarot das Bruxas',
-  description: 'Leituras de tarot intuitivas e acolhedoras. Descubra respostas para suas perguntas com o Tarot das Bruxas. Agendamento online e atendimento personalizado.',
-  keywords: ['tarot', 'taróloga', 'leitura de tarot', 'tarot das bruxas', 'consulta espiritual', 'tarot online'],
+  title: 'Amanda Bezerra | Tarô Rider Waite Deck',
+  description: 'Leituras de tarô intuitivas e acolhedoras com o tradicional Tarô Rider Waite Deck. Descubra respostas para suas perguntas com atendimento personalizado e agendamento online.',
+  keywords: ['tarot', 'taróloga', 'leitura de tarot', 'rider waite', 'tarô rider waite deck', 'consulta espiritual', 'tarot online'],
 }
 
 export const viewport = {

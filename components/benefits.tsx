@@ -41,7 +41,7 @@ export function Benefits() {
             <span>Diferenciais</span>
           </div>
           <h2 className="font-[var(--font-cinzel)] text-3xl md:text-4xl lg:text-5xl font-semibold mb-4 text-balance">
-            Por Que Escolher o Tarot das Bruxas?
+            Por Que Escolher o Tarô Rider Waite Deck?
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto text-pretty">
             Uma experiência completa de autoconhecimento e orientação espiritual
