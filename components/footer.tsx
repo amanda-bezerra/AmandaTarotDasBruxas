@@ -44,7 +44,7 @@ export function Footer() {
           {/* Copyright */}
           <div className="pt-6 border-t border-border/30 w-full">
             <p className="text-sm text-muted-foreground">
-              © {new Date().getFullYear()} Amanda Bezerra - Tarot das Bruxas. Todos os direitos reservados.
+              © {new Date().getFullYear()} Amanda Bezerra - Tarô Rider Waite Deck. Todos os direitos reservados.
             </p>
           </div>
         </div>

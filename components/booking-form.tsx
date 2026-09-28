@@ -10,11 +10,12 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 const serviceOptions = [
-  { id: "pergunta-tarot", name: "Pergunte ao Tarot das Bruxas", price: 10, isLove: false },
-  { id: "pessoa-esconde", name: "O que a pessoa esconde?", price: 30, isLove: true },
-  { id: "tarot-bruxas-30", name: "Tarot das Bruxas - 30 minutos", price: 90, isLove: false },
-  { id: "tarot-bruxas-60", name: "Tarot das Bruxas - 1 hora", price: 140, isLove: false },
+  { id: "pergunta-objetiva", name: "Pergunta Objetiva ao Tarô", price: 25, isLove: false },
+  { id: "proximo-amor", name: "Meu Próximo Amor", price: 45, isLove: true },
   { id: "templo-afrodite", name: "Templo de Afrodite", price: 50, isLove: true },
+  { id: "tiragem-completa", name: "1 Tiragem Completa", price: 75, isLove: false },
+  { id: "pacote-completo", name: "Pacote Completo com Todas", price: 150, isLove: false },
+  { id: "consulta-1h", name: "Consulta Completa (1 hora)", price: 200, isLove: false },
 ]
 
 interface FormData {

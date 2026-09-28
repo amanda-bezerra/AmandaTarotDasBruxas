@@ -22,21 +22,23 @@ export function About() {
               {/* Glow Background */}
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/20 via-accent/10 to-transparent blur-2xl" />
               
-              {/* Tarot Deck Image */}
-              <div className="relative w-64 h-80 md:w-80 md:h-96">
+              {/* Amanda Photo */}
+              <div className="relative w-64 h-80 md:w-80 md:h-96 rounded-2xl overflow-hidden border-2 border-primary/30 glow-primary">
                 <Image
-                  src="/images/tarot-deck.png"
-                  alt="Tarot das Bruxas - Baralho de 22 cartas"
+                  src="/images/amanda.jpg"
+                  alt="Amanda Bezerra - Taróloga"
                   fill
-                  className="object-contain drop-shadow-2xl"
+                  className="object-cover"
                 />
+                {/* Overlay Gradient */}
+                <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent" />
               </div>
               
               {/* Badge */}
               <div className="absolute -bottom-4 -right-4 bg-card border border-border rounded-xl px-4 py-3 shadow-lg">
                 <div className="flex items-center gap-2">
                   <Sparkles className="w-5 h-5 text-accent" />
-                  <span className="text-sm font-medium text-foreground">22 Cartas</span>
+                  <span className="text-sm font-medium text-foreground">Amanda Bezerra</span>
                 </div>
               </div>
             </div>
@@ -56,26 +58,26 @@ export function About() {
             
             <div className="space-y-4 text-muted-foreground text-lg leading-relaxed">
               <p className="text-pretty">
-                Uso o <span className="text-foreground font-medium">Tarot das Bruxas</span>, 
-                um baralho especial de 22 cartas, para te ajudar a encontrar as respostas que voce busca.
+                Uso o <span className="text-foreground font-medium">Tarô Rider Waite Deck</span>, 
+                o baralho mais tradicional e respeitado do mundo, para te ajudar a encontrar as respostas que voce busca.
               </p>
               
               <p className="text-pretty">
-                Cada carta carrega uma energia unica e profunda, conectada a sabedoria ancestral das bruxas. 
+                Cada carta carrega simbolos e uma energia unica e profunda. 
                 Atraves das tiragens, trago clareza para suas duvidas sobre amor, trabalho, caminhos e decisoes.
               </p>
               
               <p className="text-pretty">
-                Meu atendimento e acolhedor e personalizado. Voce recebe fotos reais das cartas 
-                e uma leitura completa, feita com carinho e dedicacao.
+                Meu atendimento e acolhedor e personalizado. Voce recebe fotos reais das cartas, 
+                resposta por audio e uma leitura completa, feita com carinho e dedicacao.
               </p>
             </div>
             
             {/* Stats */}
             <div className="flex flex-wrap justify-center lg:justify-start gap-8 pt-4">
               <div className="text-center">
-                <p className="text-3xl font-semibold text-primary">22</p>
-                <p className="text-sm text-muted-foreground">Cartas Magicas</p>
+                <p className="text-3xl font-semibold text-primary">78</p>
+                <p className="text-sm text-muted-foreground">Cartas Rider Waite</p>
               </div>
               <div className="text-center">
                 <p className="text-3xl font-semibold text-accent">100%</p>

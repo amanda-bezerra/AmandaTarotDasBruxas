@@ -37,7 +37,7 @@ export function Hero() {
           <div className="text-center lg:text-left space-y-6 order-2 lg:order-1">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/50 border border-border/50 text-sm text-muted-foreground">
               <Sparkles className="w-4 h-4 text-accent" />
-              <span>Tarot das Bruxas</span>
+              <span>Tarô Rider Waite Deck</span>
             </div>
             
             <h1 className="font-[var(--font-cinzel)] text-4xl md:text-5xl lg:text-6xl font-semibold leading-tight text-balance">
@@ -48,7 +48,7 @@ export function Hero() {
             
             <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-xl mx-auto lg:mx-0 text-pretty">
               Leituras intuitivas e acolhedoras para iluminar seu caminho. 
-              Encontre clareza, orientação e conexão espiritual através do Tarot das Bruxas.
+              Encontre clareza, orientação e conexão espiritual através do Tarô Rider Waite Deck.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-4">
@@ -89,23 +89,21 @@ export function Hero() {
               <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/30 via-violet-deep/20 to-transparent blur-3xl animate-pulse" />
               
               {/* Image Container */}
-              <div className="relative w-full h-full rounded-2xl overflow-hidden border-2 border-primary/30 glow-primary animate-float">
+              <div className="relative w-full h-full flex items-center justify-center animate-float">
                 <Image
-                  src="/images/amanda.jpg"
-                  alt="Amanda Bezerra - Taróloga"
+                  src="/images/rider-waite-deck.png"
+                  alt="Tarô Rider Waite Deck - Baralho tradicional de 78 cartas"
                   fill
-                  className="object-cover"
+                  className="object-contain drop-shadow-2xl"
                   priority
                 />
-                {/* Overlay Gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent" />
               </div>
               
               {/* Floating Card Badge */}
               <div className="absolute -bottom-4 -right-4 bg-card border border-border rounded-xl px-4 py-3 shadow-lg">
                 <div className="flex items-center gap-2">
                   <Moon className="w-5 h-5 text-accent" />
-                  <span className="text-sm font-medium text-foreground">A Bruxa</span>
+                  <span className="text-sm font-medium text-foreground">Rider Waite</span>
                 </div>
               </div>
             </div>
