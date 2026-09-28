@@ -22,21 +22,23 @@ export function About() {
               {/* Glow Background */}
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/20 via-accent/10 to-transparent blur-2xl" />
               
-              {/* Tarot Deck Image */}
-              <div className="relative w-64 h-80 md:w-80 md:h-96">
+              {/* Amanda Photo */}
+              <div className="relative w-64 h-80 md:w-80 md:h-96 rounded-2xl overflow-hidden border-2 border-primary/30 glow-primary">
                 <Image
-                  src="/images/rider-waite-deck.png"
-                  alt="Tarô Rider Waite Deck - Baralho tradicional de 78 cartas"
+                  src="/images/amanda.jpg"
+                  alt="Amanda Bezerra - Taróloga"
                   fill
-                  className="object-contain drop-shadow-2xl"
+                  className="object-cover"
                 />
+                {/* Overlay Gradient */}
+                <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent" />
               </div>
               
               {/* Badge */}
               <div className="absolute -bottom-4 -right-4 bg-card border border-border rounded-xl px-4 py-3 shadow-lg">
                 <div className="flex items-center gap-2">
                   <Sparkles className="w-5 h-5 text-accent" />
-                  <span className="text-sm font-medium text-foreground">Rider Waite</span>
+                  <span className="text-sm font-medium text-foreground">Amanda Bezerra</span>
                 </div>
               </div>
             </div>

@@ -89,16 +89,14 @@ export function Hero() {
               <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/30 via-violet-deep/20 to-transparent blur-3xl animate-pulse" />
               
               {/* Image Container */}
-              <div className="relative w-full h-full rounded-2xl overflow-hidden border-2 border-primary/30 glow-primary animate-float">
+              <div className="relative w-full h-full flex items-center justify-center animate-float">
                 <Image
-                  src="/images/amanda.jpg"
-                  alt="Amanda Bezerra - Taróloga"
+                  src="/images/rider-waite-deck.png"
+                  alt="Tarô Rider Waite Deck - Baralho tradicional de 78 cartas"
                   fill
-                  className="object-cover"
+                  className="object-contain drop-shadow-2xl"
                   priority
                 />
-                {/* Overlay Gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent" />
               </div>
               
               {/* Floating Card Badge */}
